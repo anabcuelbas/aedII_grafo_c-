@@ -85,6 +85,53 @@ void printarGrafo(GRAFO* g) {
     }
 }
 
+int grauVertice(GRAFO* g, int vertice) {
+    int grau = 0;
+    NO* aux = g->adj[vertice];
+
+    while(aux){
+        grau++;
+        aux = aux->prox;
+    }
+
+    return grau;
+}
+
+int grauMax(GRAFO* g) {
+    int grauMaximo = 0;
+    for(int i = 0; i < g->vertices; i++) {
+        int grau = grauVertice(g, i);
+        if(grau > grauMaximo) grauMaximo = grau;
+    }
+
+    return grauMaximo;
+}
+
+int grauMedio(GRAFO* g) {
+    int media = (2*g->arestas)/g->vertices;
+    if((2*g->arestas)%g->vertices >= (g->vertices/2)) media++;
+
+    return media;
+}
+
+int quantidadeSelfLoops(GRAFO* g){
+    int contador = 0;
+
+    for(int i = 0; i < g->vertices; i++) {
+        NO* aux = g->adj[i];
+
+        while(aux) {
+            if(aux->chave == i) {
+                contador++;
+                break;
+            }
+            aux = aux->prox;
+        }
+    }
+
+    return contador;
+}
+
 int main() {
     int V, E;
     GRAFO g;
@@ -95,6 +142,10 @@ int main() {
     inicializar(&g, V, E); //recebe o grafo e quantidade de vértices e arestas
     montarGrafo(&g);
     printarGrafo(&g);
+
+    cout << "Maior grau: " << grauMax(&g) << endl;
+    cout << "Grau Medio: " << grauMedio(&g) << endl;
+    cout << "Quantidade de Self Loops: " << quantidadeSelfLoops(&g) << endl;
 
     return 0;
 }
